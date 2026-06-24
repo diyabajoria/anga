@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { services } from "@/lib/data";
 import { useT } from "@/lib/i18n";
@@ -30,14 +30,9 @@ function BookService() {
           ))}
         </ul>
 
-        <Link
-          to="/customer/request"
-          search={{ service: slug }}
-          onClick={() => navigate({ to: "/customer/request" })}
-          className="btn-primary w-full text-lg"
-        >
+        <button onClick={() => navigate({ to: "/customer/request" })} className="btn-primary w-full text-lg">
           {t("bookNow")}
-        </Link>
+        </button>
       </div>
     </PageShell>
   );
