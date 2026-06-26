@@ -26,8 +26,8 @@ function Applications() {
               params={{ id: j.id }}
               className="card-soft card-soft-hover flex items-center gap-3 p-4"
             >
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-2xl">
-                {svc?.emoji}
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10">
+                {svc && <svc.icon className="h-6 w-6 text-primary" strokeWidth={2} />}
               </div>
               <div className="min-w-0 flex-1">
                 <h3 className="truncate font-bold">{j.title}</h3>

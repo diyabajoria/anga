@@ -20,7 +20,7 @@ function WorkerHome() {
     <PageShell bottomNav={<BottomNav role="worker" />}>
       <div className="space-y-6">
         <div>
-          <p className="text-sm text-muted-foreground">Namaste 👋</p>
+          <p className="text-sm text-muted-foreground">Namaste!</p>
           <h1 className="text-2xl font-extrabold">{t("findWork")}</h1>
         </div>
 
@@ -52,18 +52,23 @@ function WorkerHome() {
         <div>
           <h2 className="mb-3 text-base font-bold">Categories</h2>
           <div className="grid grid-cols-4 gap-3">
-            {services.map((s) => (
-              <button
-                key={s.slug}
-                onClick={() => setQ(s.en)}
-                className="card-soft card-soft-hover flex flex-col items-center gap-1.5 p-3"
-              >
-                <span className="text-2xl">{s.emoji}</span>
-                <span className="text-[11px] font-semibold leading-tight text-center">
-                  {lang === "hi" ? s.hi : s.en}
-                </span>
-              </button>
-            ))}
+            {services.map((s) => {
+              const Icon = s.icon;
+
+              return (
+                <button
+                  key={s.slug}
+                  onClick={() => setQ(s.en)}
+                  className="card-soft card-soft-hover flex flex-col items-center gap-1.5 p-3"
+                >
+                  <Icon className="h-7 w-7 text-primary" strokeWidth={2} />
+
+                  <span className="text-[11px] font-semibold leading-tight text-center">
+                    {lang === "hi" ? s.hi : s.en}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -94,8 +99,8 @@ function JobCard({ job, lang }: { job: typeof jobs[number]; lang: Lang }) {
       className="card-soft card-soft-hover block p-4"
     >
       <div className="flex items-start gap-3">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-2xl">
-          {svc?.emoji}
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10">
+          {svc && <svc.icon className="h-6 w-6 text-primary" strokeWidth={2} />}
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-base font-bold">{job.title}</h3>

@@ -1,14 +1,30 @@
-export type Service = { slug: string; en: string; hi: string; emoji: string };
+import {
+  Zap,
+  Wrench,
+  Hammer,
+  PaintRoller,
+  Car,
+  House,
+  Truck,
+} from "lucide-react";
+
+import type { LucideIcon } from "lucide-react";
+
+export type Service = {
+  slug: string;
+  en: string;
+  hi: string;
+  icon: LucideIcon;
+};
 
 export const services: Service[] = [
-  { slug: "electrician", en: "Electrician", hi: "इलेक्ट्रीशियन", emoji: "⚡" },
-  { slug: "plumber", en: "Plumber", hi: "प्लंबर", emoji: "🔧" },
-  { slug: "carpenter", en: "Carpenter", hi: "बढ़ई", emoji: "🪚" },
-  { slug: "painter", en: "Painter", hi: "पेंटर", emoji: "🎨" },
-  { slug: "driver", en: "Driver", hi: "ड्राइवर", emoji: "🚗" },
-  { slug: "house-help", en: "House Help", hi: "घर सहायक", emoji: "🏠" },
-  { slug: "delivery", en: "Delivery", hi: "डिलीवरी", emoji: "🚚" },
-  { slug: "construction", en: "Construction", hi: "निर्माण", emoji: "👷" },
+  { slug: "electrician", en: "Electrician", hi: "इलेक्ट्रीशियन", icon: Zap },
+  { slug: "plumber", en: "Plumber", hi: "प्लंबर", icon: Wrench },
+  { slug: "carpenter", en: "Carpenter", hi: "बढ़ई", icon: Hammer },
+  { slug: "painter", en: "Painter", hi: "पेंटर", icon: PaintRoller },
+  { slug: "driver", en: "Driver", hi: "ड्राइवर", icon: Car },
+  { slug: "house-help", en: "House Help", hi: "घर सहायक", icon: House },
+  { slug: "delivery", en: "Delivery", hi: "डिलीवरी", icon: Truck },
 ];
 
 export type Job = {

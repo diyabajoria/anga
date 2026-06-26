@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useT, type Lang } from "@/lib/i18n";
-import heroImg from "@/assets/anga-hero.png";
+import heroImg from "@/assets/logos/newanga.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
