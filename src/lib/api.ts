@@ -1,6 +1,8 @@
 import type { Role } from "./session";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? "https://anga-s5vx.onrender.com/api" : "http://localhost:5000/api");
 
 export class ApiError extends Error {
   status: number;
@@ -85,8 +87,9 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const authToken = token();
   if (authToken) headers.set("Authorization", `Bearer ${authToken}`);
 
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers }).catch(() => {
-    throw new ApiError("API server is not running. Start it with npm run dev.", 0);
+  const url = `${API_URL}${path}`;
+  const response = await fetch(url, { ...options, headers }).catch(() => {
+    throw new ApiError(`Could not reach API at ${API_URL}. Check backend URL and CORS.`, 0);
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new ApiError(data.message || "Request failed", response.status);
