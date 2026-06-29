@@ -1,14 +1,11 @@
-import {
-  Zap,
-  Wrench,
-  Hammer,
-  PaintRoller,
-  Car,
-  House,
-  Truck,
-} from "lucide-react";
+import { Car, Hammer, House, PaintRoller, Snowflake, Truck, Wrench, Zap } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
+
+export type LocalizedText = {
+  en: string;
+  hi: string;
+};
 
 export type Service = {
   slug: string;
@@ -18,171 +15,281 @@ export type Service = {
 };
 
 export const services: Service[] = [
-  { slug: "an", en: "Electrician", hi: "इलेक्ट्रीशियन", icon: Zap },
+  { slug: "electrician", en: "Electrician", hi: "इलेक्ट्रीशियन", icon: Zap },
   { slug: "plumber", en: "Plumber", hi: "प्लंबर", icon: Wrench },
   { slug: "carpenter", en: "Carpenter", hi: "बढ़ई", icon: Hammer },
   { slug: "painter", en: "Painter", hi: "पेंटर", icon: PaintRoller },
+  { slug: "ac-repair", en: "AC Repair", hi: "एसी रिपेयर", icon: Snowflake },
   { slug: "driver", en: "Driver", hi: "ड्राइवर", icon: Car },
   { slug: "house-help", en: "House Help", hi: "घर सहायक", icon: House },
   { slug: "delivery", en: "Delivery", hi: "डिलीवरी", icon: Truck },
 ];
 
-export type LocalizedText = {
-  en: string;
-  hi: string;
-};
+export type ApplicationStatus = "Pending" | "Accepted" | "Rejected" | "Completed";
 
 export type Job = {
   id: string;
   title: LocalizedText;
   service: string;
   location: LocalizedText;
+  area: string;
   payment: number;
+  wageType: LocalizedText;
+  distanceKm: number;
+  time: LocalizedText;
+  urgency: LocalizedText;
   customer: LocalizedText;
-  rating: number;
+  customerType: LocalizedText;
+  customerRating: number;
   description: LocalizedText;
+  requirements: LocalizedText[];
   phone: string;
-  date: LocalizedText;
+  status: ApplicationStatus | "Open";
+  applicants: number;
+  workersNeeded: number;
+  verifiedCustomer: boolean;
 };
 
 export const jobs: Job[] = [
   {
     id: "1",
-    title: {
-      en: "Fan installation",
-      hi: "पंखा लगाना",
-    },
+    title: { en: "Fan installation in 2 rooms", hi: "2 कमरों में पंखा लगाना" },
     service: "electrician",
-    location: {
-      en: "Andheri West, Mumbai",
-      hi: "अंधेरी पश्चिम, मुंबई",
-    },
-    payment: 800,
-    customer: {
-      en: "Rohit S.",
-      hi: "रोहित एस.",
-    },
-    rating: 4.6,
+    location: { en: "Andheri West, Mumbai", hi: "अंधेरी वेस्ट, मुंबई" },
+    area: "Andheri West",
+    payment: 850,
+    wageType: { en: "Same day cash/UPI", hi: "उसी दिन कैश/UPI" },
+    distanceKm: 1.8,
+    time: { en: "Today, 4:00 PM", hi: "आज, शाम 4:00 बजे" },
+    urgency: { en: "Today", hi: "आज" },
+    customer: { en: "Rohit S.", hi: "रोहित एस." },
+    customerType: { en: "Homeowner", hi: "घर मालिक" },
+    customerRating: 4.6,
     description: {
-      en: "Install 2 ceiling fans in living room and bedroom. Wiring already done.",
-      hi: "बैठक और शयनकक्ष में 2 सीलिंग पंखे लगाने हैं। वायरिंग पहले से की हुई है।",
+      en: "Install 2 ceiling fans in living room and bedroom. Wiring is ready and ladder is available.",
+      hi: "बैठक और बेडरूम में 2 सीलिंग पंखे लगाने हैं। वायरिंग तैयार है और सीढ़ी उपलब्ध है।",
     },
+    requirements: [
+      { en: "Bring tester and basic tools", hi: "टेस्टर और बेसिक औजार लाएं" },
+      { en: "1-2 hours of work", hi: "1-2 घंटे का काम" },
+    ],
     phone: "+91 98XXXXXX01",
-    date: {
-      en: "Today, 4:00 PM",
-      hi: "आज, शाम 4:00 बजे",
-    },
+    status: "Open",
+    applicants: 4,
+    workersNeeded: 1,
+    verifiedCustomer: true,
   },
-
   {
     id: "2",
-    title: {
-      en: "Kitchen sink leak",
-      hi: "रसोई के सिंक में रिसाव",
-    },
+    title: { en: "Kitchen sink leakage repair", hi: "रसोई सिंक की लीकेज रिपेयर" },
     service: "plumber",
-    location: {
-      en: "Koramangala, Bengaluru",
-      hi: "कोरमंगला, बेंगलुरु",
-    },
-    payment: 600,
-    customer: {
-      en: "Anita P.",
-      hi: "अनीता पी.",
-    },
-    rating: 4.8,
+    location: { en: "Koramangala, Bengaluru", hi: "कोरमंगला, बेंगलुरु" },
+    area: "Koramangala",
+    payment: 700,
+    wageType: { en: "Fixed job payment", hi: "फिक्स काम का भुगतान" },
+    distanceKm: 2.4,
+    time: { en: "Today, 6:00 PM", hi: "आज, शाम 6:00 बजे" },
+    urgency: { en: "Urgent", hi: "जरूरी" },
+    customer: { en: "Anita P.", hi: "अनीता पी." },
+    customerType: { en: "Homeowner", hi: "घर मालिक" },
+    customerRating: 4.8,
     description: {
-      en: "Sink pipe leaking under counter. Need urgent fix.",
-      hi: "सिंक के नीचे पाइप से पानी रिस रहा है। तुरंत मरम्मत की आवश्यकता है।",
+      en: "Sink pipe leaking under counter. Need quick repair and replacement washer if needed.",
+      hi: "सिंक के नीचे पाइप से पानी रिस रहा है। जरूरत हो तो वॉशर बदलकर जल्दी रिपेयर करना है।",
     },
+    requirements: [
+      { en: "Leak repair experience", hi: "लीकेज रिपेयर का अनुभव" },
+      { en: "Carry plumber tape", hi: "प्लंबर टेप साथ लाएं" },
+    ],
     phone: "+91 98XXXXXX02",
-    date: {
-      en: "Today, 6:00 PM",
-      hi: "आज, शाम 6:00 बजे",
-    },
+    status: "Pending",
+    applicants: 6,
+    workersNeeded: 1,
+    verifiedCustomer: true,
   },
-
   {
     id: "3",
-    title: {
-      en: "Wardrobe repair",
-      hi: "अलमारी की मरम्मत",
-    },
+    title: { en: "Wardrobe hinge and polish work", hi: "अलमारी हिंज और पॉलिश का काम" },
     service: "carpenter",
-    location: {
-      en: "Gomti Nagar, Lucknow",
-      hi: "गोमती नगर, लखनऊ",
-    },
+    location: { en: "Gomti Nagar, Lucknow", hi: "गोमती नगर, लखनऊ" },
+    area: "Gomti Nagar",
     payment: 1200,
-    customer: {
-      en: "Vikram K.",
-      hi: "विक्रम के.",
-    },
-    rating: 4.4,
+    wageType: { en: "Daily wage", hi: "दैनिक मजदूरी" },
+    distanceKm: 3.1,
+    time: { en: "Tomorrow, 11:00 AM", hi: "कल, सुबह 11:00 बजे" },
+    urgency: { en: "Tomorrow", hi: "कल" },
+    customer: { en: "Vikram K.", hi: "विक्रम के." },
+    customerType: { en: "Shop owner", hi: "दुकान मालिक" },
+    customerRating: 4.4,
     description: {
-      en: "Door hinge broken, shelf needs polishing.",
-      hi: "अलमारी का कब्ज़ा टूट गया है और शेल्फ की पॉलिश करनी है।",
+      en: "Wardrobe door hinge is broken and one shelf needs polishing. Materials paid separately.",
+      hi: "अलमारी का दरवाजा हिंज टूटा है और एक शेल्फ की पॉलिश करनी है। सामान का पैसा अलग मिलेगा।",
     },
+    requirements: [
+      { en: "Bring drill machine", hi: "ड्रिल मशीन लाएं" },
+      { en: "Material bill accepted", hi: "सामान का बिल मान्य होगा" },
+    ],
     phone: "+91 98XXXXXX03",
-    date: {
-      en: "Tomorrow, 11:00 AM",
-      hi: "कल, सुबह 11:00 बजे",
-    },
+    status: "Accepted",
+    applicants: 3,
+    workersNeeded: 1,
+    verifiedCustomer: false,
   },
-
   {
     id: "4",
-    title: {
-      en: "2 BHK painting",
-      hi: "2 बीएचके पेंटिंग",
-    },
+    title: { en: "2 BHK interior painting", hi: "2 बीएचके अंदरूनी पेंटिंग" },
     service: "painter",
-    location: {
-      en: "Salt Lake, Kolkata",
-      hi: "सॉल्ट लेक, कोलकाता",
-    },
+    location: { en: "Salt Lake, Kolkata", hi: "सॉल्ट लेक, कोलकाता" },
+    area: "Salt Lake",
     payment: 9000,
-    customer: {
-      en: "Meera D.",
-      hi: "मीरा डी.",
-    },
-    rating: 4.9,
+    wageType: { en: "Team payment", hi: "टीम भुगतान" },
+    distanceKm: 4.6,
+    time: { en: "This weekend", hi: "इस सप्ताहांत" },
+    urgency: { en: "Flexible", hi: "समय लचीला" },
+    customer: { en: "Meera D.", hi: "मीरा डी." },
+    customerType: { en: "Contractor", hi: "कॉन्ट्रैक्टर" },
+    customerRating: 4.9,
     description: {
-      en: "Full interior painting, 2 bedrooms and hall. Paint provided.",
-      hi: "2 बेडरूम और हॉल की पूरी अंदरूनी पेंटिंग करनी है। पेंट उपलब्ध है।",
+      en: "Full interior painting for two bedrooms and hall. Paint provided. Need two workers.",
+      hi: "दो बेडरूम और हॉल की अंदरूनी पेंटिंग। पेंट उपलब्ध है। दो मजदूर चाहिए।",
     },
+    requirements: [
+      { en: "2 workers preferred", hi: "2 मजदूर बेहतर" },
+      { en: "Bring rollers and masking tape", hi: "रोलर और मास्किंग टेप लाएं" },
+    ],
     phone: "+91 98XXXXXX04",
-    date: {
-      en: "This weekend",
-      hi: "इस सप्ताहांत",
-    },
+    status: "Completed",
+    applicants: 8,
+    workersNeeded: 2,
+    verifiedCustomer: true,
   },
-
   {
     id: "5",
-    title: {
-      en: "Daily school drop",
-      hi: "रोज़ाना स्कूल छोड़ना",
-    },
+    title: { en: "Daily school van driver", hi: "रोज स्कूल वैन ड्राइवर" },
     service: "driver",
-    location: {
-      en: "Sector 21, Gurgaon",
-      hi: "सेक्टर 21, गुरुग्राम",
-    },
+    location: { en: "Sector 21, Gurgaon", hi: "सेक्टर 21, गुरुग्राम" },
+    area: "Sector 21",
     payment: 7000,
-    customer: {
-      en: "Sandeep T.",
-      hi: "संदीप टी.",
-    },
-    rating: 4.7,
+    wageType: { en: "Monthly", hi: "मासिक" },
+    distanceKm: 2.9,
+    time: { en: "Daily, 7:30 AM", hi: "रोज, सुबह 7:30 बजे" },
+    urgency: { en: "Starts Monday", hi: "सोमवार से शुरू" },
+    customer: { en: "Sandeep T.", hi: "संदीप टी." },
+    customerType: { en: "Homeowner", hi: "घर मालिक" },
+    customerRating: 4.7,
     description: {
-      en: "Pick up and drop off children from school daily.",
-      hi: "बच्चों को प्रतिदिन स्कूल छोड़ना और वापस लाना।",
+      en: "Pick up and drop children from school daily. Valid license and clean driving record needed.",
+      hi: "बच्चों को रोज स्कूल छोड़ना और वापस लाना है। वैध लाइसेंस और अच्छा ड्राइविंग रिकॉर्ड चाहिए।",
     },
+    requirements: [
+      { en: "Driving license required", hi: "ड्राइविंग लाइसेंस जरूरी" },
+      { en: "Police verification preferred", hi: "पुलिस वेरिफिकेशन बेहतर" },
+    ],
     phone: "+91 98XXXXXX05",
-    date: {
-      en: "Daily",
-      hi: "प्रतिदिन",
+    status: "Rejected",
+    applicants: 5,
+    workersNeeded: 1,
+    verifiedCustomer: true,
+  },
+];
+
+export type Worker = {
+  id: string;
+  name: string;
+  phone: string;
+  skill: string;
+  area: string;
+  distanceKm: number;
+  rating: number;
+  experience: string;
+  expectedWage: number;
+  verified: boolean;
+  documentUploaded: boolean;
+  availableToday: boolean;
+  completedJobs: number;
+  languages: string[];
+  bio: LocalizedText;
+};
+
+export const workers: Worker[] = [
+  {
+    id: "w1",
+    name: "Suresh Maurya",
+    phone: "+91 97XXXXXX11",
+    skill: "electrician",
+    area: "Andheri West",
+    distanceKm: 1.2,
+    rating: 4.8,
+    experience: "6 years",
+    expectedWage: 900,
+    verified: true,
+    documentUploaded: true,
+    availableToday: true,
+    completedJobs: 128,
+    languages: ["Hindi", "Marathi"],
+    bio: {
+      en: "Fan, wiring, MCB and home electrical repair specialist.",
+      hi: "पंखा, वायरिंग, MCB और घर की इलेक्ट्रिकल रिपेयर में विशेषज्ञ।",
+    },
+  },
+  {
+    id: "w2",
+    name: "Imran Khan",
+    phone: "+91 98XXXXXX22",
+    skill: "plumber",
+    area: "Koramangala",
+    distanceKm: 2.1,
+    rating: 4.7,
+    experience: "5 years",
+    expectedWage: 750,
+    verified: true,
+    documentUploaded: true,
+    availableToday: true,
+    completedJobs: 96,
+    languages: ["Hindi", "Kannada"],
+    bio: {
+      en: "Leakage, bathroom fitting and kitchen sink repair worker.",
+      hi: "लीकेज, बाथरूम फिटिंग और किचन सिंक रिपेयर का काम।",
+    },
+  },
+  {
+    id: "w3",
+    name: "Ramesh Kumar",
+    phone: "+91 99XXXXXX33",
+    skill: "carpenter",
+    area: "Gomti Nagar",
+    distanceKm: 3.4,
+    rating: 4.6,
+    experience: "8 years",
+    expectedWage: 1100,
+    verified: true,
+    documentUploaded: false,
+    availableToday: false,
+    completedJobs: 143,
+    languages: ["Hindi"],
+    bio: {
+      en: "Furniture repair, doors, polish and modular fitting.",
+      hi: "फर्नीचर रिपेयर, दरवाजे, पॉलिश और मॉड्यूलर फिटिंग।",
+    },
+  },
+  {
+    id: "w4",
+    name: "Pooja Sharma",
+    phone: "+91 96XXXXXX44",
+    skill: "house-help",
+    area: "Sector 21",
+    distanceKm: 1.9,
+    rating: 4.9,
+    experience: "4 years",
+    expectedWage: 650,
+    verified: true,
+    documentUploaded: true,
+    availableToday: true,
+    completedJobs: 82,
+    languages: ["Hindi", "English"],
+    bio: {
+      en: "House cleaning, cooking support and daily home help.",
+      hi: "घर की सफाई, खाना बनाने में मदद और रोज का घरेलू काम।",
     },
   },
 ];
@@ -190,9 +297,13 @@ export const jobs: Job[] = [
 export type Request = {
   id: string;
   service: string;
+  title: LocalizedText;
   status: LocalizedText;
   worker: string | null;
   date: LocalizedText;
+  location: LocalizedText;
+  budget: number;
+  urgency: LocalizedText;
   applicants: number;
 };
 
@@ -200,43 +311,47 @@ export const seedRequests: Request[] = [
   {
     id: "r1",
     service: "electrician",
-    status: {
-      en: "Assigned",
-      hi: "सौंपा गया",
-    },
-    worker: "Suresh M.",
-    date: {
-      en: "Today, 5:00 PM",
-      hi: "आज, शाम 5:00 बजे",
-    },
+    title: { en: "Fan fitting at home", hi: "घर पर पंखा फिटिंग" },
+    status: { en: "Assigned", hi: "सौंपा गया" },
+    worker: "Suresh Maurya",
+    date: { en: "Today, 5:00 PM", hi: "आज, शाम 5:00 बजे" },
+    location: { en: "Andheri West", hi: "अंधेरी वेस्ट" },
+    budget: 900,
+    urgency: { en: "Today", hi: "आज" },
     applicants: 3,
   },
   {
     id: "r2",
     service: "house-help",
-    status: {
-      en: "Open",
-      hi: "खुला",
-    },
+    title: { en: "Morning house help", hi: "सुबह घर सहायक" },
+    status: { en: "Open", hi: "खुला" },
     worker: null,
-    date: {
-      en: "Tomorrow, 9:00 AM",
-      hi: "कल, सुबह 9:00 बजे",
-    },
+    date: { en: "Tomorrow, 9:00 AM", hi: "कल, सुबह 9:00 बजे" },
+    location: { en: "Sector 21", hi: "सेक्टर 21" },
+    budget: 650,
+    urgency: { en: "Tomorrow", hi: "कल" },
     applicants: 5,
   },
   {
     id: "r3",
     service: "painter",
-    status: {
-      en: "Done",
-      hi: "पूरा हुआ",
-    },
-    worker: "Ramesh K.",
-    date: {
-      en: "Last week",
-      hi: "पिछले सप्ताह",
-    },
+    title: { en: "Room painting", hi: "कमरे की पेंटिंग" },
+    status: { en: "Completed", hi: "पूरा हुआ" },
+    worker: "Ramesh Kumar",
+    date: { en: "Last week", hi: "पिछले सप्ताह" },
+    location: { en: "Salt Lake", hi: "सॉल्ट लेक" },
+    budget: 3000,
+    urgency: { en: "Done", hi: "पूरा" },
     applicants: 7,
   },
 ];
+
+export const assistantExamples = {
+  worker: "Mujhe aaj electrician ka kaam chahiye",
+  customer: "Mujhe kal plumber chahiye sink repair ke liye",
+};
+
+export function serviceName(slug: string, lang: "en" | "hi") {
+  const service = services.find((s) => s.slug === slug);
+  return service ? (lang === "hi" ? service.hi : service.en) : slug;
+}

@@ -1,9 +1,12 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Pencil, LogOut, ClipboardList, Phone, MapPin } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ClipboardList, LogOut, MapPin, Pencil, Phone } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { PageShell } from "@/components/PageShell";
 import { BottomNav } from "@/components/BottomNav";
+import { PageShell } from "@/components/PageShell";
+import { api, type ApiCustomerProfile } from "@/lib/api";
 import { useT } from "@/lib/i18n";
+import { logoutLocal } from "@/lib/session";
 
 export const Route = createFileRoute("/customer/profile")({
   head: () => ({ meta: [{ title: "Anga - Profile" }] }),
@@ -13,9 +16,17 @@ export const Route = createFileRoute("/customer/profile")({
 function Profile() {
   const { t } = useT();
   const navigate = useNavigate();
+  const [profile, setProfile] = useState<ApiCustomerProfile | null>(null);
+
+  useEffect(() => {
+    api
+      .profile()
+      .then((result) => setProfile(result.profile as ApiCustomerProfile | null))
+      .catch(() => setProfile(null));
+  }, []);
 
   const logout = () => {
-    if (typeof window !== "undefined") localStorage.removeItem("rozgaar.role");
+    logoutLocal();
     toast.success("Logged out");
     navigate({ to: "/" });
   };
@@ -25,16 +36,22 @@ function Profile() {
       <div className="space-y-5">
         <div className="card-soft flex flex-col items-center gap-2 p-6 text-center">
           <div className="grid h-20 w-20 place-items-center rounded-full bg-accent text-3xl font-bold text-accent-foreground">
-            P
+            {profile?.name?.charAt(0) || "C"}
           </div>
-          <h2 className="text-xl font-extrabold">Priya Sharma</h2>
+          <h2 className="text-xl font-extrabold">{profile?.name || "Customer"}</h2>
         </div>
-
         <div className="card-soft divide-y divide-border">
-          <Row label={t("")} value="+91 98XXXXXX22" icon={<Phone className="h-4 w-4" />} />
-          <Row label={t("address")} value="Andheri, Mumbai" icon={<MapPin className="h-4 w-4" />} />
+          <Row
+            label={t("phone")}
+            value={profile?.phone || "-"}
+            icon={<Phone className="h-4 w-4" />}
+          />
+          <Row
+            label={t("address")}
+            value={profile?.address || "-"}
+            icon={<MapPin className="h-4 w-4" />}
+          />
         </div>
-
         <div className="grid gap-3">
           <button onClick={() => toast("Edit coming soon")} className="btn-outline">
             <Pencil className="h-4 w-4" /> {t("editProfile")}

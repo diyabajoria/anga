@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Briefcase, Bell, User, ClipboardList } from "lucide-react";
+import { Home, Briefcase, Bell, User, ClipboardList, Bot } from "lucide-react";
 import { useT } from "@/lib/i18n";
 
 type Item = { to: string; icon: React.ComponentType<{ className?: string }>; label: string };
@@ -13,19 +13,21 @@ export function BottomNav({ role }: { role: "worker" | "customer" }) {
       ? [
           { to: "/worker", icon: Home, label: t("home") },
           { to: "/worker/applications", icon: Briefcase, label: t("jobs") },
+          { to: "/assistant", icon: Bot, label: t("assistant") },
           { to: "/worker/notifications", icon: Bell, label: t("notifications") },
           { to: "/worker/profile", icon: User, label: t("profile") },
         ]
       : [
           { to: "/customer", icon: Home, label: t("home") },
           { to: "/customer/my-requests", icon: ClipboardList, label: t("requests") },
+          { to: "/assistant", icon: Bot, label: t("assistant") },
           { to: "/customer/notifications", icon: Bell, label: t("notifications") },
           { to: "/customer/profile", icon: User, label: t("profile") },
         ];
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 border-t border-border bg-card/95 backdrop-blur">
-      <div className="mx-auto flex max-w-md items-stretch justify-around px-2 py-2">
+    <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2 border-t border-border bg-card/95 shadow-[0_-12px_30px_-24px_rgba(15,23,42,0.55)] backdrop-blur">
+      <div className="flex items-stretch justify-around px-2 py-2">
         {items.map((it) => {
           const active = pathname === it.to;
           const Icon = it.icon;

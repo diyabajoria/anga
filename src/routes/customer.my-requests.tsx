@@ -1,76 +1,131 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { PageShell } from "@/components/PageShell";
+import { useEffect, useState } from "react";
 import { BottomNav } from "@/components/BottomNav";
-import { useT } from "@/lib/i18n";
+import { PageShell } from "@/components/PageShell";
+import { api, type ApiJob } from "@/lib/api";
 import { seedRequests, services } from "@/lib/data";
-import { useState } from "react";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/customer/my-requests")({
-  head: () => ({ meta: [{ title: "Anga — My Requests" }] }),
+  head: () => ({ meta: [{ title: "Anga - My Posted Jobs" }] }),
   component: MyRequests,
 });
 
 function MyRequests() {
   const { t, lang } = useT();
-  const [list, setList] = useState(seedRequests);
+  const [apiJobs, setApiJobs] = useState<ApiJob[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api
+      .jobs("?mine=true")
+      .then((result) => setApiJobs(result.jobs))
+      .catch(() => setApiJobs([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <PageShell title={t("myRequests")} back="/customer" bottomNav={<BottomNav role="customer" />}>
       <div className="space-y-3">
-        {list.length === 0 && (
+        {loading && (
           <p className="rounded-2xl bg-muted p-6 text-center text-sm text-muted-foreground">
-            No requests yet
+            Loading requests...
           </p>
         )}
-        {list.map((r) => {
-          const svc = services.find((s) => s.slug === r.service);
-          const Icon = svc?.icon;
-          return (
-            <div key={r.id} className="card-soft p-4">
-              <div className="flex items-start gap-3">
-                
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10">
-                  {Icon && <Icon className="h-6 w-6 text-primary" />}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="truncate font-bold">{lang === "hi" ? svc?.hi : svc?.en}</h3>
-                  <p className="text-xs text-muted-foreground">{r.date[lang]}</p>
-                  {r.worker && <p className="mt-0.5 text-xs">👷 {r.worker}</p>}
-                </div>
-                <span
-                  className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
-                    r.status[lang] === "Open"
-                      ? "bg-accent/15 text-accent"
-                      : r.status[lang] === "Assigned"
-                      ? "bg-success/15 text-success"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {r.status[lang]}
-                </span>
-              </div>
-              <div className="mt-3 grid grid-cols-3 gap-2">
-                <button onClick={() => toast("Edit coming soon")} className="btn-outline px-2 py-2 text-xs">
-                  {t("editRequest")}
-                </button>
-                <button
-                  onClick={() => {
-                    setList((p) => p.filter((x) => x.id !== r.id));
-                    toast.success("Cancelled");
-                  }}
-                  className="btn-outline px-2 py-2 text-xs"
-                >
-                  {t("cancelRequest")}
-                </button>
-                <button onClick={() => toast(`${r.applicants} applicants`)} className="btn-primary px-2 py-2 text-xs">
-                  {t("viewApplicants")}
-                </button>
-              </div>
-            </div>
-          );
-        })}
+        {!loading && apiJobs.length === 0 && seedRequests.length === 0 && (
+          <p className="rounded-2xl bg-muted p-6 text-center text-sm text-muted-foreground">
+            {lang === "hi" ? "अभी कोई काम पोस्ट नहीं किया" : "No requests yet"}
+          </p>
+        )}
+        {apiJobs.length > 0
+          ? apiJobs.map((job) => (
+              <RequestCard
+                key={job._id}
+                id={job._id}
+                title={job.title}
+                service={job.category}
+                date={[job.date, job.time].filter(Boolean).join(", ")}
+                location={job.location}
+                budget={job.wage}
+                status={job.status}
+                applicants={job.applicants.length}
+              />
+            ))
+          : seedRequests.map((request) => (
+              <RequestCard
+                key={request.id}
+                id={request.id}
+                title={request.title[lang]}
+                service={request.service}
+                date={request.date[lang]}
+                location={request.location[lang]}
+                budget={request.budget}
+                status={request.status[lang]}
+                applicants={request.applicants}
+              />
+            ))}
       </div>
     </PageShell>
+  );
+}
+
+function RequestCard({
+  id,
+  title,
+  service,
+  date,
+  location,
+  budget,
+  status,
+  applicants,
+}: {
+  id: string;
+  title: string;
+  service: string;
+  date: string;
+  location: string;
+  budget: number;
+  status: string;
+  applicants: number;
+}) {
+  const { t } = useT();
+  const svc = services.find((item) => item.slug === service);
+  const Icon = svc?.icon;
+  return (
+    <div className="card-soft p-4">
+      <div className="flex items-start gap-3">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10">
+          {Icon && <Icon className="h-6 w-6 text-primary" />}
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate font-bold">{title}</h3>
+          <p className="text-xs text-muted-foreground">
+            {location} · {date} · ₹{budget}
+          </p>
+        </div>
+        <span className="shrink-0 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent">
+          {status}
+        </span>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <button onClick={() => toast("Edit coming soon")} className="btn-outline px-2 py-2 text-xs">
+          {t("editRequest")}
+        </button>
+        <button
+          onClick={() => toast.success("Cancelled")}
+          className="btn-outline px-2 py-2 text-xs"
+        >
+          {t("cancelRequest")}
+        </button>
+        <Link
+          to="/customer/request/$id/applicants"
+          params={{ id }}
+          className="btn-primary px-2 py-2 text-xs"
+        >
+          {t("viewApplicants")} ({applicants})
+        </Link>
+      </div>
+    </div>
   );
 }

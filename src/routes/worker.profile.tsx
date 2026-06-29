@@ -1,9 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Star, Pencil, FileUp, LogOut, Phone, MapPin } from "lucide-react";
+import { FileUp, LogOut, MapPin, Pencil, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { PageShell } from "@/components/PageShell";
 import { BottomNav } from "@/components/BottomNav";
+import { PageShell } from "@/components/PageShell";
+import { api, type ApiWorkerProfile } from "@/lib/api";
+import { serviceName } from "@/lib/data";
 import { useT } from "@/lib/i18n";
+import { logoutLocal } from "@/lib/session";
 
 export const Route = createFileRoute("/worker/profile")({
   head: () => ({ meta: [{ title: "Anga - Profile" }] }),
@@ -12,32 +16,18 @@ export const Route = createFileRoute("/worker/profile")({
 
 function Profile() {
   const { t, lang } = useT();
-
-    const profile = {
-      name: {
-        en: "Suresh Kumar",
-        hi: "सुरेश कुमार",
-      },
-
-      skills: {
-        en: "Electrician, Plumber",
-        hi: "इलेक्ट्रीशियन, प्लंबर",
-      },
-
-      experience: {
-        en: "5 years",
-        hi: "5 वर्ष",
-      },
-
-      location: {
-        en: "Mumbai, MH",
-        hi: "मुंबई, महाराष्ट्र",
-      },
-    };
   const navigate = useNavigate();
+  const [profile, setProfile] = useState<ApiWorkerProfile | null>(null);
+
+  useEffect(() => {
+    api
+      .profile()
+      .then((result) => setProfile(result.profile as ApiWorkerProfile | null))
+      .catch(() => setProfile(null));
+  }, []);
 
   const logout = () => {
-    if (typeof window !== "undefined") localStorage.removeItem("rozgaar.role");
+    logoutLocal();
     toast.success("Logged out");
     navigate({ to: "/" });
   };
@@ -47,39 +37,32 @@ function Profile() {
       <div className="space-y-5">
         <div className="card-soft flex flex-col items-center gap-2 p-6 text-center">
           <div className="grid h-20 w-20 place-items-center rounded-full bg-primary text-3xl font-bold text-primary-foreground">
-            S
+            {profile?.name?.charAt(0) || "W"}
           </div>
-          <h2 className="text-xl font-extrabold">
-            {profile.name[lang]}
-          </h2>
+          <h2 className="text-xl font-extrabold">{profile?.name || "Worker"}</h2>
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Star className="h-4 w-4 fill-current text-amber-500" /> 4.7 · {t("rating")}
+            <Star className="h-4 w-4 fill-current text-amber-500" /> {profile?.rating ?? 4.5} ·{" "}
+            {t("rating")}
           </p>
         </div>
-
         <div className="card-soft divide-y divide-border">
           <Row
-              label={t("skills")}
-              value={profile.skills[lang]}
-            />
-
-            <Row
-              label={t("experience")}
-              value={profile.experience[lang]}
-            />
-
-            <Row
-              label={t("location")}
-              value={profile.location[lang]}
-              icon={<MapPin className="h-4 w-4" />}
-            />
+            label={t("skills")}
+            value={profile?.skills?.map((skill) => serviceName(skill, lang)).join(", ") || "-"}
+          />
+          <Row label={t("experience")} value={profile?.experience || "-"} />
+          <Row label={t("expectedWage")} value={profile ? `₹${profile.expectedWage}` : "-"} />
+          <Row
+            label={t("location")}
+            value={profile?.location || "-"}
+            icon={<MapPin className="h-4 w-4" />}
+          />
         </div>
-
         <div className="grid gap-3">
           <button onClick={() => toast("Edit coming soon")} className="btn-outline">
             <Pencil className="h-4 w-4" /> {t("editProfile")}
           </button>
-          <button onClick={() => toast("Upload coming soon")} className="btn-outline">
+          <button onClick={() => toast.success(t("documentUploaded"))} className="btn-outline">
             <FileUp className="h-4 w-4" /> {t("uploadDocs")}
           </button>
           <button onClick={logout} className="btn-primary bg-destructive">

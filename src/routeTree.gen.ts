@@ -9,23 +9,53 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as RoleSelectionRouteImport } from './routes/role-selection'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AssistantRouteImport } from './routes/assistant'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkerIndexRouteImport } from './routes/worker.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
+import { Route as WorkerSetupRouteImport } from './routes/worker.setup'
 import { Route as WorkerProfileRouteImport } from './routes/worker.profile'
 import { Route as WorkerNotificationsRouteImport } from './routes/worker.notifications'
 import { Route as WorkerApplicationsRouteImport } from './routes/worker.applications'
+import { Route as CustomerSetupRouteImport } from './routes/customer.setup'
 import { Route as CustomerRequestRouteImport } from './routes/customer.request'
 import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
 import { Route as CustomerMyRequestsRouteImport } from './routes/customer.my-requests'
+import { Route as AuthPhoneRouteImport } from './routes/auth.phone'
+import { Route as AuthOtpRouteImport } from './routes/auth.otp'
 import { Route as WorkerJobIdRouteImport } from './routes/worker.job.$id'
+import { Route as CustomerWorkerIdRouteImport } from './routes/customer.worker.$id'
 import { Route as CustomerServiceSlugRouteImport } from './routes/customer.service.$slug'
+import { Route as CustomerRequestIdApplicantsRouteImport } from './routes/customer.request.$id.applicants'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoleSelectionRoute = RoleSelectionRouteImport.update({
   id: '/role-selection',
   path: '/role-selection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,6 +73,11 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
   path: '/customer/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkerSetupRoute = WorkerSetupRouteImport.update({
+  id: '/worker/setup',
+  path: '/worker/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkerProfileRoute = WorkerProfileRouteImport.update({
   id: '/worker/profile',
   path: '/worker/profile',
@@ -56,6 +91,11 @@ const WorkerNotificationsRoute = WorkerNotificationsRouteImport.update({
 const WorkerApplicationsRoute = WorkerApplicationsRouteImport.update({
   id: '/worker/applications',
   path: '/worker/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomerSetupRoute = CustomerSetupRouteImport.update({
+  id: '/customer/setup',
+  path: '/customer/setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomerRequestRoute = CustomerRequestRouteImport.update({
@@ -78,9 +118,24 @@ const CustomerMyRequestsRoute = CustomerMyRequestsRouteImport.update({
   path: '/customer/my-requests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthPhoneRoute = AuthPhoneRouteImport.update({
+  id: '/auth/phone',
+  path: '/auth/phone',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthOtpRoute = AuthOtpRouteImport.update({
+  id: '/auth/otp',
+  path: '/auth/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkerJobIdRoute = WorkerJobIdRouteImport.update({
   id: '/worker/job/$id',
   path: '/worker/job/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomerWorkerIdRoute = CustomerWorkerIdRouteImport.update({
+  id: '/customer/worker/$id',
+  path: '/customer/worker/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomerServiceSlugRoute = CustomerServiceSlugRouteImport.update({
@@ -88,124 +143,227 @@ const CustomerServiceSlugRoute = CustomerServiceSlugRouteImport.update({
   path: '/customer/service/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CustomerRequestIdApplicantsRoute =
+  CustomerRequestIdApplicantsRouteImport.update({
+    id: '/$id/applicants',
+    path: '/$id/applicants',
+    getParentRoute: () => CustomerRequestRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
+  '/assistant': typeof AssistantRoute
+  '/login': typeof LoginRoute
   '/role-selection': typeof RoleSelectionRoute
+  '/signup': typeof SignupRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/phone': typeof AuthPhoneRoute
   '/customer/my-requests': typeof CustomerMyRequestsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/profile': typeof CustomerProfileRoute
-  '/customer/request': typeof CustomerRequestRoute
+  '/customer/request': typeof CustomerRequestRouteWithChildren
+  '/customer/setup': typeof CustomerSetupRoute
   '/worker/applications': typeof WorkerApplicationsRoute
   '/worker/notifications': typeof WorkerNotificationsRoute
   '/worker/profile': typeof WorkerProfileRoute
+  '/worker/setup': typeof WorkerSetupRoute
   '/customer/': typeof CustomerIndexRoute
   '/worker/': typeof WorkerIndexRoute
   '/customer/service/$slug': typeof CustomerServiceSlugRoute
+  '/customer/worker/$id': typeof CustomerWorkerIdRoute
   '/worker/job/$id': typeof WorkerJobIdRoute
+  '/customer/request/$id/applicants': typeof CustomerRequestIdApplicantsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
+  '/assistant': typeof AssistantRoute
+  '/login': typeof LoginRoute
   '/role-selection': typeof RoleSelectionRoute
+  '/signup': typeof SignupRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/phone': typeof AuthPhoneRoute
   '/customer/my-requests': typeof CustomerMyRequestsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/profile': typeof CustomerProfileRoute
-  '/customer/request': typeof CustomerRequestRoute
+  '/customer/request': typeof CustomerRequestRouteWithChildren
+  '/customer/setup': typeof CustomerSetupRoute
   '/worker/applications': typeof WorkerApplicationsRoute
   '/worker/notifications': typeof WorkerNotificationsRoute
   '/worker/profile': typeof WorkerProfileRoute
+  '/worker/setup': typeof WorkerSetupRoute
   '/customer': typeof CustomerIndexRoute
   '/worker': typeof WorkerIndexRoute
   '/customer/service/$slug': typeof CustomerServiceSlugRoute
+  '/customer/worker/$id': typeof CustomerWorkerIdRoute
   '/worker/job/$id': typeof WorkerJobIdRoute
+  '/customer/request/$id/applicants': typeof CustomerRequestIdApplicantsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
+  '/assistant': typeof AssistantRoute
+  '/login': typeof LoginRoute
   '/role-selection': typeof RoleSelectionRoute
+  '/signup': typeof SignupRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/phone': typeof AuthPhoneRoute
   '/customer/my-requests': typeof CustomerMyRequestsRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/profile': typeof CustomerProfileRoute
-  '/customer/request': typeof CustomerRequestRoute
+  '/customer/request': typeof CustomerRequestRouteWithChildren
+  '/customer/setup': typeof CustomerSetupRoute
   '/worker/applications': typeof WorkerApplicationsRoute
   '/worker/notifications': typeof WorkerNotificationsRoute
   '/worker/profile': typeof WorkerProfileRoute
+  '/worker/setup': typeof WorkerSetupRoute
   '/customer/': typeof CustomerIndexRoute
   '/worker/': typeof WorkerIndexRoute
   '/customer/service/$slug': typeof CustomerServiceSlugRoute
+  '/customer/worker/$id': typeof CustomerWorkerIdRoute
   '/worker/job/$id': typeof WorkerJobIdRoute
+  '/customer/request/$id/applicants': typeof CustomerRequestIdApplicantsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
+    | '/assistant'
+    | '/login'
     | '/role-selection'
+    | '/signup'
+    | '/auth/otp'
+    | '/auth/phone'
     | '/customer/my-requests'
     | '/customer/notifications'
     | '/customer/profile'
     | '/customer/request'
+    | '/customer/setup'
     | '/worker/applications'
     | '/worker/notifications'
     | '/worker/profile'
+    | '/worker/setup'
     | '/customer/'
     | '/worker/'
     | '/customer/service/$slug'
+    | '/customer/worker/$id'
     | '/worker/job/$id'
+    | '/customer/request/$id/applicants'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
+    | '/assistant'
+    | '/login'
     | '/role-selection'
+    | '/signup'
+    | '/auth/otp'
+    | '/auth/phone'
     | '/customer/my-requests'
     | '/customer/notifications'
     | '/customer/profile'
     | '/customer/request'
+    | '/customer/setup'
     | '/worker/applications'
     | '/worker/notifications'
     | '/worker/profile'
+    | '/worker/setup'
     | '/customer'
     | '/worker'
     | '/customer/service/$slug'
+    | '/customer/worker/$id'
     | '/worker/job/$id'
+    | '/customer/request/$id/applicants'
   id:
     | '__root__'
     | '/'
+    | '/app'
+    | '/assistant'
+    | '/login'
     | '/role-selection'
+    | '/signup'
+    | '/auth/otp'
+    | '/auth/phone'
     | '/customer/my-requests'
     | '/customer/notifications'
     | '/customer/profile'
     | '/customer/request'
+    | '/customer/setup'
     | '/worker/applications'
     | '/worker/notifications'
     | '/worker/profile'
+    | '/worker/setup'
     | '/customer/'
     | '/worker/'
     | '/customer/service/$slug'
+    | '/customer/worker/$id'
     | '/worker/job/$id'
+    | '/customer/request/$id/applicants'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRoute
+  AssistantRoute: typeof AssistantRoute
+  LoginRoute: typeof LoginRoute
   RoleSelectionRoute: typeof RoleSelectionRoute
+  SignupRoute: typeof SignupRoute
+  AuthOtpRoute: typeof AuthOtpRoute
+  AuthPhoneRoute: typeof AuthPhoneRoute
   CustomerMyRequestsRoute: typeof CustomerMyRequestsRoute
   CustomerNotificationsRoute: typeof CustomerNotificationsRoute
   CustomerProfileRoute: typeof CustomerProfileRoute
-  CustomerRequestRoute: typeof CustomerRequestRoute
+  CustomerRequestRoute: typeof CustomerRequestRouteWithChildren
+  CustomerSetupRoute: typeof CustomerSetupRoute
   WorkerApplicationsRoute: typeof WorkerApplicationsRoute
   WorkerNotificationsRoute: typeof WorkerNotificationsRoute
   WorkerProfileRoute: typeof WorkerProfileRoute
+  WorkerSetupRoute: typeof WorkerSetupRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
   WorkerIndexRoute: typeof WorkerIndexRoute
   CustomerServiceSlugRoute: typeof CustomerServiceSlugRoute
+  CustomerWorkerIdRoute: typeof CustomerWorkerIdRoute
   WorkerJobIdRoute: typeof WorkerJobIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/role-selection': {
       id: '/role-selection'
       path: '/role-selection'
       fullPath: '/role-selection'
       preLoaderRoute: typeof RoleSelectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -229,6 +387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/worker/setup': {
+      id: '/worker/setup'
+      path: '/worker/setup'
+      fullPath: '/worker/setup'
+      preLoaderRoute: typeof WorkerSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/worker/profile': {
       id: '/worker/profile'
       path: '/worker/profile'
@@ -248,6 +413,13 @@ declare module '@tanstack/react-router' {
       path: '/worker/applications'
       fullPath: '/worker/applications'
       preLoaderRoute: typeof WorkerApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customer/setup': {
+      id: '/customer/setup'
+      path: '/customer/setup'
+      fullPath: '/customer/setup'
+      preLoaderRoute: typeof CustomerSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customer/request': {
@@ -278,11 +450,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerMyRequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/phone': {
+      id: '/auth/phone'
+      path: '/auth/phone'
+      fullPath: '/auth/phone'
+      preLoaderRoute: typeof AuthPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/otp': {
+      id: '/auth/otp'
+      path: '/auth/otp'
+      fullPath: '/auth/otp'
+      preLoaderRoute: typeof AuthOtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/worker/job/$id': {
       id: '/worker/job/$id'
       path: '/worker/job/$id'
       fullPath: '/worker/job/$id'
       preLoaderRoute: typeof WorkerJobIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customer/worker/$id': {
+      id: '/customer/worker/$id'
+      path: '/customer/worker/$id'
+      fullPath: '/customer/worker/$id'
+      preLoaderRoute: typeof CustomerWorkerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customer/service/$slug': {
@@ -292,22 +485,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerServiceSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/customer/request/$id/applicants': {
+      id: '/customer/request/$id/applicants'
+      path: '/$id/applicants'
+      fullPath: '/customer/request/$id/applicants'
+      preLoaderRoute: typeof CustomerRequestIdApplicantsRouteImport
+      parentRoute: typeof CustomerRequestRoute
+    }
   }
 }
 
+interface CustomerRequestRouteChildren {
+  CustomerRequestIdApplicantsRoute: typeof CustomerRequestIdApplicantsRoute
+}
+
+const CustomerRequestRouteChildren: CustomerRequestRouteChildren = {
+  CustomerRequestIdApplicantsRoute: CustomerRequestIdApplicantsRoute,
+}
+
+const CustomerRequestRouteWithChildren = CustomerRequestRoute._addFileChildren(
+  CustomerRequestRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRoute,
+  AssistantRoute: AssistantRoute,
+  LoginRoute: LoginRoute,
   RoleSelectionRoute: RoleSelectionRoute,
+  SignupRoute: SignupRoute,
+  AuthOtpRoute: AuthOtpRoute,
+  AuthPhoneRoute: AuthPhoneRoute,
   CustomerMyRequestsRoute: CustomerMyRequestsRoute,
   CustomerNotificationsRoute: CustomerNotificationsRoute,
   CustomerProfileRoute: CustomerProfileRoute,
-  CustomerRequestRoute: CustomerRequestRoute,
+  CustomerRequestRoute: CustomerRequestRouteWithChildren,
+  CustomerSetupRoute: CustomerSetupRoute,
   WorkerApplicationsRoute: WorkerApplicationsRoute,
   WorkerNotificationsRoute: WorkerNotificationsRoute,
   WorkerProfileRoute: WorkerProfileRoute,
+  WorkerSetupRoute: WorkerSetupRoute,
   CustomerIndexRoute: CustomerIndexRoute,
   WorkerIndexRoute: WorkerIndexRoute,
   CustomerServiceSlugRoute: CustomerServiceSlugRoute,
+  CustomerWorkerIdRoute: CustomerWorkerIdRoute,
   WorkerJobIdRoute: WorkerJobIdRoute,
 }
 export const routeTree = rootRouteImport

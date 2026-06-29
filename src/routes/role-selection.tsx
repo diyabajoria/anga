@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { HardHat, UserRound } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { setRole, type Role } from "@/lib/session";
 
 export const Route = createFileRoute("/role-selection")({
   head: () => ({ meta: [{ title: "Anga - Who are you?" }] }),
@@ -11,9 +12,9 @@ function RoleSelect() {
   const { t } = useT();
   const navigate = useNavigate();
 
-  const pick = (role: "worker" | "customer") => {
-    if (typeof window !== "undefined") localStorage.setItem("rozgaar.role", role);
-    navigate({ to: role === "worker" ? "/worker" : "/customer" });
+  const pick = (role: Role) => {
+    setRole(role);
+    navigate({ to: "/auth/phone" });
   };
 
   return (
@@ -21,7 +22,7 @@ function RoleSelect() {
       <div className="mx-auto flex min-h-screen max-w-md flex-col px-6 pt-14 pb-10">
         <h1 className="text-center text-3xl font-extrabold">{t("whoAreYou")}</h1>
         <p className="mt-2 text-center text-sm text-muted-foreground">
-          Choose to continue / आगे बढ़ने के लिए चुनें
+          {t("continue")} / आगे बढ़ने के लिए चुनें
         </p>
 
         <div className="mt-10 grid gap-5">
