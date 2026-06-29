@@ -14,11 +14,23 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.CORS_ORIGIN,
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+].filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return true;
+  if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return true;
+  return allowedOrigins.includes(origin);
+}
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }
