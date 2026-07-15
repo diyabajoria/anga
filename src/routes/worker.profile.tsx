@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
 import { PageShell } from "@/components/PageShell";
+import defaultWorkerProfileImage from "@/assets/profile/construction-worker.png";
 import { api, type ApiWorkerProfile } from "@/lib/api";
 import { serviceName } from "@/lib/data";
 import { useT } from "@/lib/i18n";
@@ -36,17 +37,11 @@ function Profile() {
     <PageShell title={t("profile")} back="/worker" bottomNav={<BottomNav role="worker" />}>
       <div className="space-y-5">
         <div className="card-soft flex flex-col items-center gap-2 p-6 text-center">
-          {profile?.photoUrl ? (
-            <img
-              src={profile.photoUrl}
-              alt={profile.name ? `${profile.name} profile photo` : "Worker profile photo"}
-              className="h-20 w-20 rounded-full border-4 border-primary/10 object-cover shadow-sm"
-            />
-          ) : (
-            <div className="grid h-20 w-20 place-items-center rounded-full bg-primary text-3xl font-bold text-primary-foreground">
-              {profile?.name?.charAt(0) || "W"}
-            </div>
-          )}
+          <img
+            src={profile?.photoUrl || defaultWorkerProfileImage}
+            alt={profile?.name ? `${profile.name} profile photo` : "Worker profile photo"}
+            className="h-20 w-20 rounded-full border-4 border-primary/10 bg-white object-cover shadow-sm"
+          />
           <h2 className="text-xl font-extrabold">{profile?.name || "Worker"}</h2>
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
             <Star className="h-4 w-4 fill-current text-amber-500" /> {profile?.rating ?? 4.5} ·{" "}

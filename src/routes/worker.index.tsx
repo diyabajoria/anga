@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
 import { PageShell } from "@/components/PageShell";
+import defaultWorkerProfileImage from "@/assets/profile/construction-worker.png";
 import { ApiError, api, type ApiJob, type ApiNotification, type ApiWorkerProfile } from "@/lib/api";
 import { jobs as fallbackJobs, serviceName, services } from "@/lib/data";
 import { useT, type Lang } from "@/lib/i18n";
@@ -255,9 +256,11 @@ function WorkerHome() {
 
           <div className="relative z-40 flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-lg font-black text-primary shadow-lg">
-                W
-              </div>
+              <img
+                src={profile?.photoUrl || defaultWorkerProfileImage}
+                alt={profile?.name ? `${profile.name} profile photo` : "Worker profile photo"}
+                className="h-12 w-12 shrink-0 rounded-full bg-white object-cover shadow-lg ring-2 ring-white/70"
+              />
               <div className="min-w-0">
                 <h1 className="text-lg font-extrabold leading-tight">{t("greeting")}!</h1>
                 <button
