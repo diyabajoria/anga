@@ -1,8 +1,14 @@
 import type { Role } from "./session";
 
-const API_URL =
+const RAW_API_URL =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.PROD ? "https://anga-s5vx.onrender.com/api" : "http://localhost:5000/api");
+const API_URL = normalizeApiUrl(RAW_API_URL);
+
+function normalizeApiUrl(url: string) {
+  const trimmed = url.trim().replace(/\/+$/, "");
+  return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
+}
 
 export class ApiError extends Error {
   status: number;
