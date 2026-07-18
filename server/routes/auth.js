@@ -38,8 +38,8 @@ authRouter.post(
 
     const otp =
       isDemoPhone(phone) || process.env.NODE_ENV !== "production"
-        ? "123456"
-        : String(Math.floor(100000 + Math.random() * 900000));
+        ? "1234"
+        : String(Math.floor(1000 + Math.random() * 9000));
     await Otp.deleteMany({ phone });
     await Otp.create({
       phone,
@@ -69,7 +69,8 @@ authRouter.post(
 
     const record = await Otp.findOne({ phone }).sort({ createdAt: -1 });
     const valid =
-      otp === "123456" ||
+      otp === "1234" ||
+      (isDemoPhone(phone) && otp === "123456") ||
       (record && record.otpHash === hashOtp(otp) && record.expiresAt > new Date());
     if (!valid) return res.status(400).json({ message: "Invalid OTP" });
 

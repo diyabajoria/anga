@@ -279,6 +279,126 @@
     box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.24);
   }
 
+  .phone-status-bar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 4;
+    display: grid;
+    height: 2.35rem;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0.45rem 1.1rem 0;
+    color: #090b10;
+    font-size: 0.74rem;
+    font-weight: 800;
+    pointer-events: none;
+  }
+
+  .phone-status-time {
+    line-height: 1;
+  }
+
+  .phone-dynamic-island {
+    position: relative;
+    display: inline-flex;
+    width: 4.35rem;
+    height: 1.35rem;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 999px;
+    background: #000;
+    box-shadow:
+      inset 0 0 0 1px oklch(1 0 0 / 0.07),
+      0 1px 4px oklch(0 0 0 / 0.32);
+  }
+
+  .phone-island-camera {
+    margin-right: 0.45rem;
+    width: 0.34rem;
+    height: 0.34rem;
+    border-radius: 999px;
+    background: radial-gradient(circle at 62% 42%, #155cff 0 18%, #081225 22% 58%, #02040a 62%);
+    box-shadow: 0 0 0 1px oklch(1 0 0 / 0.05);
+  }
+
+  .phone-status-icons {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.32rem;
+  }
+
+  .phone-signal {
+    display: inline-flex;
+    height: 0.68rem;
+    align-items: flex-end;
+    gap: 0.09rem;
+  }
+
+  .phone-signal span {
+    width: 0.12rem;
+    border-radius: 999px;
+    background: #090b10;
+  }
+
+  .phone-signal span:nth-child(1) {
+    height: 0.24rem;
+  }
+
+  .phone-signal span:nth-child(2) {
+    height: 0.36rem;
+  }
+
+  .phone-signal span:nth-child(3) {
+    height: 0.5rem;
+  }
+
+  .phone-signal span:nth-child(4) {
+    height: 0.64rem;
+  }
+
+  .phone-wifi {
+    width: 0.62rem;
+    height: 0.45rem;
+    border: 2px solid #090b10;
+    border-bottom: 0;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-radius: 999px 999px 0 0;
+    transform: translateY(0.07rem);
+  }
+
+  .phone-battery {
+    position: relative;
+    display: inline-flex;
+    width: 1.05rem;
+    height: 0.52rem;
+    align-items: center;
+    border: 1.6px solid #090b10;
+    border-radius: 0.22rem;
+    padding: 0.08rem;
+  }
+
+  .phone-battery::after {
+    content: "";
+    position: absolute;
+    right: -0.17rem;
+    top: 50%;
+    width: 0.11rem;
+    height: 0.26rem;
+    border-radius: 0 999px 999px 0;
+    background: #090b10;
+    transform: translateY(-50%);
+  }
+
+  .phone-battery span {
+    display: block;
+    width: 72%;
+    height: 100%;
+    border-radius: 0.12rem;
+    background: #090b10;
+  }
+
   .phone-hero {
     width: min(340px, 32vw, calc((100vh - 56px) / 2));
     height: min(680px, calc(100vh - 56px), calc(32vw * 2));
@@ -381,6 +501,8 @@
 
   .phone-screen iframe {
     display: block;
+    height: calc(100% - 2.35rem) !important;
+    margin-top: 2.35rem;
     overflow: hidden;
   }
 

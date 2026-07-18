@@ -19,6 +19,7 @@ import { PageShell } from "@/components/PageShell";
 import { api, type ApiJob } from "@/lib/api";
 import { jobs as fallbackJobs, serviceName, services } from "@/lib/data";
 import { useT } from "@/lib/i18n";
+import { saveJob } from "@/lib/savedJobs";
 
 export const Route = createFileRoute("/worker/job/$id")({
   head: () => ({ meta: [{ title: "Anga - Job details" }] }),
@@ -45,6 +46,21 @@ function JobDetails() {
   const job = apiJob ? mapApiJob(apiJob) : fallback ? mapFallbackJob(fallback, lang) : null;
   const accepted = job?.status === "assigned" || job?.applicationStatus === "accepted";
   const service = job ? services.find((item) => item.slug === job.service) : null;
+
+  const saveCurrentJob = () => {
+    if (!job) return;
+    saveJob({
+      id: job.id,
+      title: job.title,
+      service: job.service,
+      location: job.location,
+      payment: job.payment,
+      time: job.time,
+      distanceKm: job.distanceKm,
+      rating: job.rating,
+    });
+    toast.success(t("saved"));
+  };
 
   const apply = async () => {
     if (!apiJob) {
@@ -103,7 +119,7 @@ function JobDetails() {
               </h1>
               <button
                 type="button"
-                onClick={() => toast.success(t("saved"))}
+                onClick={saveCurrentJob}
                 className="grid h-12 w-12 place-items-center rounded-full bg-white/15 text-primary-foreground shadow-lg backdrop-blur"
                 aria-label="More"
               >
@@ -212,10 +228,7 @@ function JobDetails() {
             )}
 
             <div className="mt-4 grid grid-cols-3 gap-2">
-              <button
-                onClick={() => toast.success(t("saved"))}
-                className="btn-outline px-2 text-xs"
-              >
+              <button onClick={saveCurrentJob} className="btn-outline px-2 text-xs">
                 <Bookmark className="h-4 w-4" /> {t("saveJob")}
               </button>
               <a href="tel:9000000000" className="btn-outline px-2 text-xs">

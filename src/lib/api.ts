@@ -113,13 +113,21 @@ export const api = {
       body: JSON.stringify({ phone }),
     }),
   verifyOtp: (phone: string, otp: string, role: Role) =>
-    request<{ token: string; user: { _id: string; role: Role; isProfileComplete: boolean } }>(
-      "/auth/verify-otp",
-      {
-        method: "POST",
-        body: JSON.stringify({ phone, otp, role }),
-      },
-    ),
+    request<{
+      token: string;
+      user: {
+        _id: string;
+        role: Role;
+        isProfileComplete: boolean;
+        name?: string;
+        phone?: string;
+        location?: string;
+        address?: string;
+      };
+    }>("/auth/verify-otp", {
+      method: "POST",
+      body: JSON.stringify({ phone, otp, role }),
+    }),
   me: () =>
     request<{
       user: { _id: string; role: Role; isProfileComplete: boolean; name: string; phone: string };

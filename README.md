@@ -28,7 +28,7 @@ Use these demo credentials:
 
 ```text
 Mobile number: 1234567890
-OTP: 123456
+OTP: 1234
 ```
 
 Recommended demo path:
@@ -39,7 +39,7 @@ Recommended demo path:
 4. Choose `Create account` or `Log in`.
 5. Select a role: Worker or Customer.
 6. Enter `1234567890`.
-7. Use OTP `123456`.
+7. Use OTP `1234`.
 8. Complete onboarding.
 9. Try the worker dashboard, customer dashboard, AI assistant, job detail, post job, applicants, notifications, and profile flows.
 
@@ -62,7 +62,7 @@ Recommended demo path:
 - Role-aware login and signup.
 - Existing users are routed to the correct dashboard.
 - New or incomplete users are routed to onboarding.
-- Development OTP is `123456`.
+- Development OTP is `1234`.
 
 ### Worker Onboarding
 

@@ -185,7 +185,7 @@ function Landing() {
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
                     No real phone number needed. Use mobile number{" "}
                     <span className="font-extrabold text-primary">1234567890</span> and OTP{" "}
-                    <span className="font-extrabold text-primary">123456</span>.
+                    <span className="font-extrabold text-primary">1234</span>.
                   </p>
                 </div>
               </div>

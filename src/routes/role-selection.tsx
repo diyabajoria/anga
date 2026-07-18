@@ -10,6 +10,7 @@ import {
   setProfileComplete,
   setRole,
   setToken,
+  saveProfile,
   type Role,
 } from "@/lib/session";
 
@@ -35,11 +36,18 @@ function RoleSelect() {
     setRole(role);
     setPhone("1234567890");
     try {
-      await api.sendOtp("1234567890");
-      const result = await api.verifyOtp("1234567890", "123456", role);
+      const otpResult = await api.sendOtp("1234567890");
+      const demoOtp = otpResult.otp || "1234";
+      const result = await api.verifyOtp("1234567890", demoOtp, role);
       setToken(result.token);
       setRole(result.user.role);
       setProfileComplete(result.user.role, true);
+      saveProfile(result.user.role, {
+        name: result.user.name || (role === "customer" ? "Demo Customer" : "Demo Worker"),
+        phone: result.user.phone || "1234567890",
+        location: result.user.location || "",
+        address: result.user.address || "",
+      });
       toast.success(lang === "hi" ? "Demo login ready" : "Demo login ready");
       navigate({ to: role === "customer" ? "/customer" : "/worker" });
     } catch (error) {
@@ -85,7 +93,7 @@ function RoleSelect() {
                 {lang === "hi" ? "Judge demo" : "Judge demo"}
               </p>
               <p className="mt-0.5 text-xs font-semibold text-muted-foreground">
-                OTP 123456 · Phone 1234567890
+                OTP 1234 · Phone 1234567890
               </p>
             </div>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-black uppercase text-primary">

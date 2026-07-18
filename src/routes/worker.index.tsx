@@ -3,6 +3,7 @@ import gsap from "gsap";
 import {
   ArrowUpRight,
   Bell,
+  Bookmark,
   BriefcaseBusiness,
   CheckCircle2,
   IndianRupee,
@@ -157,6 +158,9 @@ function WorkerHome() {
   const workerLocation =
     profile?.location || (lang === "hi" ? "अपना क्षेत्र जोड़ें" : "Add your area");
 
+  const workerName = profile?.name?.trim() || (lang === "hi" ? "Worker" : "Worker");
+  const unreadNotifications = notifications.some((item) => !item.read);
+
   const startVoiceSearch = () => {
     if (typeof window === "undefined" || listening) return;
     const SpeechRecognition =
@@ -262,7 +266,9 @@ function WorkerHome() {
                 className="h-12 w-12 shrink-0 rounded-full bg-white object-cover shadow-lg ring-2 ring-white/70"
               />
               <div className="min-w-0">
-                <h1 className="text-lg font-extrabold leading-tight">{t("greeting")}!</h1>
+                <h1 className="truncate text-lg font-extrabold leading-tight">
+                  {t("greeting")}, {workerName}
+                </h1>
                 <button
                   type="button"
                   onClick={() => {
@@ -276,17 +282,33 @@ function WorkerHome() {
                 </button>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setNotificationsOpen((open) => !open);
-                setLocationOpen(false);
-              }}
-              className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white/15 text-primary-foreground backdrop-blur"
-              aria-label={t("notifications")}
-            >
-              <Bell className="h-5 w-5" />
-            </button>
+            <div className="flex shrink-0 items-center gap-2">
+              <Link
+                to="/worker/saved"
+                className="grid h-11 w-11 place-items-center rounded-full bg-white/15 text-primary-foreground shadow-sm backdrop-blur transition hover:bg-white/25"
+                aria-label={t("saveJob")}
+                onClick={() => {
+                  setNotificationsOpen(false);
+                  setLocationOpen(false);
+                }}
+              >
+                <Bookmark className="h-5 w-5" />
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setNotificationsOpen((open) => !open);
+                  setLocationOpen(false);
+                }}
+                className="relative grid h-11 w-11 place-items-center rounded-full bg-white/15 text-primary-foreground shadow-sm backdrop-blur transition hover:bg-white/25"
+                aria-label={t("notifications")}
+              >
+                <Bell className="h-5 w-5" />
+                {unreadNotifications && (
+                  <span className="absolute right-2.5 top-2.5 h-2.5 w-2.5 rounded-full border-2 border-primary bg-red-500" />
+                )}
+              </button>
+            </div>
 
             {notificationsOpen && (
               <NotificationsDropdown
@@ -435,7 +457,7 @@ function WorkerHome() {
             {otherJobs.length > 0 && (
               <div className="pt-2">
                 <h3 className="mb-3 text-base font-extrabold">
-                  {lang === "hi" ? "और काम" : "Popular nearby"}
+                  {lang === "hi" ? "और काम" : "Recent job post"}
                 </h3>
                 <div className="space-y-3">
                   {otherJobs.map((job) => (

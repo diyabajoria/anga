@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkerIndexRouteImport } from './routes/worker.index'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as WorkerSetupRouteImport } from './routes/worker.setup'
+import { Route as WorkerSavedRouteImport } from './routes/worker.saved'
 import { Route as WorkerProfileRouteImport } from './routes/worker.profile'
 import { Route as WorkerNotificationsRouteImport } from './routes/worker.notifications'
 import { Route as WorkerApplicationsRouteImport } from './routes/worker.applications'
@@ -76,6 +77,11 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
 const WorkerSetupRoute = WorkerSetupRouteImport.update({
   id: '/worker/setup',
   path: '/worker/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkerSavedRoute = WorkerSavedRouteImport.update({
+  id: '/worker/saved',
+  path: '/worker/saved',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkerProfileRoute = WorkerProfileRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/worker/applications': typeof WorkerApplicationsRoute
   '/worker/notifications': typeof WorkerNotificationsRoute
   '/worker/profile': typeof WorkerProfileRoute
+  '/worker/saved': typeof WorkerSavedRoute
   '/worker/setup': typeof WorkerSetupRoute
   '/customer/': typeof CustomerIndexRoute
   '/worker/': typeof WorkerIndexRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/worker/applications': typeof WorkerApplicationsRoute
   '/worker/notifications': typeof WorkerNotificationsRoute
   '/worker/profile': typeof WorkerProfileRoute
+  '/worker/saved': typeof WorkerSavedRoute
   '/worker/setup': typeof WorkerSetupRoute
   '/customer': typeof CustomerIndexRoute
   '/worker': typeof WorkerIndexRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/worker/applications': typeof WorkerApplicationsRoute
   '/worker/notifications': typeof WorkerNotificationsRoute
   '/worker/profile': typeof WorkerProfileRoute
+  '/worker/saved': typeof WorkerSavedRoute
   '/worker/setup': typeof WorkerSetupRoute
   '/customer/': typeof CustomerIndexRoute
   '/worker/': typeof WorkerIndexRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/worker/applications'
     | '/worker/notifications'
     | '/worker/profile'
+    | '/worker/saved'
     | '/worker/setup'
     | '/customer/'
     | '/worker/'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/worker/applications'
     | '/worker/notifications'
     | '/worker/profile'
+    | '/worker/saved'
     | '/worker/setup'
     | '/customer'
     | '/worker'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/worker/applications'
     | '/worker/notifications'
     | '/worker/profile'
+    | '/worker/saved'
     | '/worker/setup'
     | '/customer/'
     | '/worker/'
@@ -320,6 +332,7 @@ export interface RootRouteChildren {
   WorkerApplicationsRoute: typeof WorkerApplicationsRoute
   WorkerNotificationsRoute: typeof WorkerNotificationsRoute
   WorkerProfileRoute: typeof WorkerProfileRoute
+  WorkerSavedRoute: typeof WorkerSavedRoute
   WorkerSetupRoute: typeof WorkerSetupRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
   WorkerIndexRoute: typeof WorkerIndexRoute
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       path: '/worker/setup'
       fullPath: '/worker/setup'
       preLoaderRoute: typeof WorkerSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/worker/saved': {
+      id: '/worker/saved'
+      path: '/worker/saved'
+      fullPath: '/worker/saved'
+      preLoaderRoute: typeof WorkerSavedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/worker/profile': {
@@ -512,6 +532,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkerApplicationsRoute: WorkerApplicationsRoute,
   WorkerNotificationsRoute: WorkerNotificationsRoute,
   WorkerProfileRoute: WorkerProfileRoute,
+  WorkerSavedRoute: WorkerSavedRoute,
   WorkerSetupRoute: WorkerSetupRoute,
   CustomerIndexRoute: CustomerIndexRoute,
   WorkerIndexRoute: WorkerIndexRoute,

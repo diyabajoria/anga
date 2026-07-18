@@ -38,7 +38,7 @@ const helpSources: RagSource[] = [
     id: "help-otp",
     type: "help",
     title: "Mobile OTP login",
-    body: "Anga uses mobile number and OTP for login. No email or password is needed. In local demo mode the OTP is 123456 after Send OTP succeeds.",
+    body: "Anga uses mobile number and OTP for login. No email or password is needed. In local demo mode the OTP is 1234 after Send OTP succeeds.",
     actionLabel: "Login",
     actionTo: "/role-selection",
   },
@@ -75,8 +75,6 @@ const helpSources: RagSource[] = [
 export function answerWithRag(query: string, lang: Lang): RagAnswer {
   const cleanQuery = query.trim();
   const sources = buildKnowledge(lang);
-  const ranked = rankSources(cleanQuery, sources);
-  const topSources = ranked.slice(0, 3);
 
   if (!cleanQuery) {
     return {
@@ -88,6 +86,12 @@ export function answerWithRag(query: string, lang: Lang): RagAnswer {
       suggestions: defaultSuggestions(lang),
     };
   }
+
+  const intentAnswer = answerByIntent(cleanQuery, sources, lang);
+  if (intentAnswer) return intentAnswer;
+
+  const ranked = rankSources(cleanQuery, sources);
+  const topSources = ranked.slice(0, 3);
 
   if (topSources.length === 0) {
     return {
@@ -113,6 +117,95 @@ export function answerWithRag(query: string, lang: Lang): RagAnswer {
     sources: topSources,
     suggestions: relatedSuggestions(primary, lang),
   };
+}
+
+function answerByIntent(query: string, sources: RagSource[], lang: Lang): RagAnswer | null {
+  const normalized = query.toLowerCase();
+  const wantsTodayJobs =
+    /today|aaj|आज|kaam chahiye|काम चाहिए|job|jobs|work/.test(normalized) &&
+    /today|aaj|आज|show|dikhao|दिखाओ/.test(normalized);
+  const wantsVerifiedWorkers =
+    /verified|verify|trusted|badge|document|rating|भरोसे|वेरिफाइड/.test(normalized) &&
+    /worker|workers|plumber|electrician|hire|मज़दूर|worker/.test(normalized);
+  const wantsPaymentSafety =
+    /payment|pay|wage|cash|upi|safe|budget|पैसे|भुगतान|मजदूरी/.test(normalized) &&
+    /safe|safety|secure|clarity|कैसे|how|रख/.test(normalized);
+
+  if (wantsTodayJobs) {
+    const jobSources = sources
+      .filter((source) => source.type === "job")
+      .filter((source) => /today|आज|aaj/i.test(source.body) || source.body.includes("Today"))
+      .slice(0, 3);
+
+    return {
+      answer:
+        lang === "hi"
+          ? "Aaj ke nearby job posts yeh rahe. Wage, time, distance aur customer rating check karke job detail kholkar apply karein."
+          : "Here are today’s nearby job posts. Check wage, timing, distance and customer rating, then open the job detail to apply.",
+      sources: jobSources.length
+        ? jobSources
+        : sources.filter((source) => source.type === "job").slice(0, 3),
+      suggestions:
+        lang === "hi"
+          ? ["Electrician jobs dikhao", "Payment kitna hai?", "Apply kaise karu?"]
+          : ["Show electrician jobs", "What is the payment?", "How do I apply?"],
+    };
+  }
+
+  if (wantsVerifiedWorkers) {
+    const workerSources = sources
+      .filter((source) => source.type === "worker")
+      .filter((source) => /verified worker|document uploaded|rating/i.test(source.body))
+      .slice(0, 3);
+
+    return {
+      answer:
+        lang === "hi"
+          ? "Verified worker choose karte waqt verified badge, document uploaded badge, rating, experience aur expected wage compare karein. Worker profile kholkar call ya assign kar sakte hain."
+          : "To find verified workers, compare the verified badge, document uploaded badge, rating, experience and expected wage. Open a worker profile to call or assign them.",
+      sources: workerSources,
+      suggestions:
+        lang === "hi"
+          ? [
+              "Available today workers dikhao",
+              "Expected wage kya hai?",
+              "Document badge ka matlab?",
+            ]
+          : [
+              "Show workers available today",
+              "What is the expected wage?",
+              "What does document badge mean?",
+            ],
+    };
+  }
+
+  if (wantsPaymentSafety) {
+    const safetySources = sources
+      .filter((source) => source.id === "safety-payment" || source.id === "safety-trust")
+      .slice(0, 3);
+
+    return {
+      answer:
+        lang === "hi"
+          ? "Payment safe rakhne ke liye kaam start hone se pehle daily wage, payment mode, material cost, extra charges aur completion time confirm karein. Accepted job ke baad issue ho to Report/SOS use karein."
+          : "To keep payment safe, confirm daily wage, payment mode, material cost, extra charges and completion time before work starts. After a job is accepted, use Report/SOS if something goes wrong.",
+      sources: safetySources,
+      suggestions:
+        lang === "hi"
+          ? [
+              "Daily wage kya hota hai?",
+              "Report issue kaise karu?",
+              "Verified customer kaise check karu?",
+            ]
+          : [
+              "What is daily wage?",
+              "How do I report an issue?",
+              "How do I check verified customers?",
+            ],
+    };
+  }
+
+  return null;
 }
 
 function buildKnowledge(lang: Lang): RagSource[] {
